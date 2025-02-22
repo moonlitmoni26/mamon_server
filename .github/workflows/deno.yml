@@ -1,0 +1,65 @@
+# এই GitHub ওয়ার্কফ্লোটি Deno প্রজেক্টের কোডের গুণমান ও টেস্ট কভারেজ নিশ্চিত করতে ব্যবহৃত হয়।
+# এটি Deno সেটআপ করে, কোডের ফরম্যাটিং, টাইপ চেক, লিন্টিং এবং টেস্ট চালায়, তারপর টেস্ট কভারেজ রিপোর্ট তৈরি করে Codecov-এ আপলোড করে।
+#
+# দ্রষ্টব্য: Codecov অ্যাকশনটি তৃতীয় পক্ষ দ্বারা প্রদান করা হয়েছে এবং এর পৃথক শর্তাবলী ও গোপনীয়তা নীতিমালা রয়েছে।
+# আরও তথ্যের জন্য দেখুন: https://github.com/denoland/setup-deno এবং https://github.com/codecov/codecov-action
+
+name: Deno
+
+# এই ওয়ার্কফ্লোটি 'main' ব্রাঞ্চে পুশ বা পুল রিকোয়েস্টের ক্ষেত্রে চালু হবে
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+# শুধুমাত্র রেপোজিটরির কন্টেন্ট পড়ার অনুমতি দেওয়া হয়েছে
+permissions:
+  contents: read
+
+jobs:
+  continuous_integration:
+    runs-on: ubuntu-latest
+
+    steps:
+      # ১. রেপোজিটরি ক্লোন করা: কোডের সর্বশেষ ভার্সন checkout করে নেয়
+      - name: Setup repo
+        uses: actions/checkout@v4
+
+      # ২. Deno সেটআপ করা: নির্দিষ্ট Deno ভার্সন ইনস্টল করা হয়।
+      #    "vx.x.x" এর জায়গায় আপনার পছন্দসই Deno ভার্সন উল্লেখ করুন।
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: vx.x.x
+
+      # ৩. ফরম্যাটিং যাচাই করা: কোডের ফরম্যাটিং 'deno fmt --check' দিয়ে যাচাই করা হয়।
+      #    যদি কোনো ফরম্যাটিং সমস্যা থাকে, এই ধাপটি ব্যর্থ হবে।
+      - name: Check Formatting
+        run: deno fmt --check
+
+      # ৪. টাইপ চেক করা: TypeScript কোডের টাইপ সঠিক কিনা তা যাচাই করা হয়।
+      - name: Type Check
+        run: deno check .
+
+      # ৫. লিন্টিং করা: কোডের সম্ভাব্য সমস্যা ও স্টাইল ইস্যু শনাক্ত করার জন্য 'deno lint' চালানো হয়।
+      - name: Run linter
+        run: deno lint
+
+      # ৬. টেস্ট চালানো এবং কভারেজ সংগ্রহ করা:
+      #    '-A' ফ্ল্যাগ দিয়ে টেস্ট রান করার সময় সকল পারমিশন প্রদান করা হয়, এবং --coverage ফ্ল্যাগে নির্দিষ্ট ডিরেক্টরিতে কভারেজ ডেটা সংরক্ষণ করা হয়।
+      - name: Run tests with coverage
+        run: deno test -A --coverage && deno coverage ./coverage
+
+      # ৭. LCOV রিপোর্ট তৈরি করা:
+      #    'deno coverage' কমান্ড ব্যবহার করে পূর্বে সংগ্রহ করা কভারেজ ডেটা থেকে LCOV ফাইল (lcov.info) তৈরি করা হয়।
+      - name: Generate LCOV report
+        run: deno coverage ./coverage --lcov > lcov.info
+
+      # ৮. Codecov-এ কভারেজ রিপোর্ট আপলোড করা:
+      #    Codecov Action (codecov/codecov-action@v3) ব্যবহার করে lcov.info ফাইলটি Codecov সার্ভারে আপলোড করা হয়।
+      #    যদি আপনার রেপোজিটরি প্রাইভেট হয় বা অতিরিক্ত নিরাপত্তা প্রয়োজন হয়, তাহলে CODECOV_TOKEN সিক্রেট হিসেবে সংযোজন করতে পারেন।
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}

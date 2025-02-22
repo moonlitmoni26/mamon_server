@@ -1,2 +1,5 @@
 .idea
 .zed
+
+coverage
+lcov.info
