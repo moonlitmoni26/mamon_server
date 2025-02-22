@@ -1,0 +1,40 @@
+# এই ওয়ার্কফ্লোটি এমন অ্যাকশন ব্যবহার করে যা GitHub দ্বারা প্রমাণীকৃত নয়।
+# এগুলি তৃতীয় পক্ষ দ্বারা প্রদান করা হয় এবং পৃথক সার্ভিস শর্তাবলী, গোপনীয়তা নীতি, এবং সহায়তা ডকুমেন্টেশন দ্বারা পরিচালিত।
+#
+# এই ওয়ার্কফ্লোটি Deno ইনস্টল করবে, তারপর `deno lint` এবং `deno test` চালাবে।
+# আরও তথ্যের জন্য দেখুন: https://github.com/denoland/setup-deno
+
+name: Deno
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup repo
+        uses: actions/checkout@v4
+
+      - name: Setup Deno
+        # ব্যবহার: denoland/setup-deno@v1
+        uses: denoland/setup-deno@61fe2df320078202e33d7d5ad347e7dcfa0e8f31  # v1.1.2
+        with:
+          deno-version: v1.x
+
+      # প্রতিটি কমিটে 'deno fmt' ব্যবহারের সত্যতা যাচাই করতে এই ধাপটি আনকমেন্ট করুন।
+      # - name: Verify formatting
+      #   run: deno fmt --check
+
+      - name: Run linter
+        run: deno lint
+
+      - name: Run tests
+        run: deno test -A

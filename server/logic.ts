@@ -5,7 +5,7 @@
  * @returns {Object} - একটি অবজেক্ট যার মধ্যে হোস্টনেম ও পোর্ট আছে।
  */
 export function serverer_thikana() {
-  var address = {
+  const address = {
     hostname: "192.168.0.111", // স্থানীয় সার্ভারের আইপি ঠিকানা
     port: 7797, // পোর্ট নম্বর
   };
@@ -27,7 +27,7 @@ export function serverer_thikana() {
  * ```
  */
 export function number_jog_koro(number_1: number, number_2: number) {
-  var sum = number_1 + number_2; // দুটি সংখ্যার যোগফল নির্ণয়
+  const sum = number_1 + number_2; // দুটি সংখ্যার যোগফল নির্ণয়
   return sum;
 }
 
@@ -39,23 +39,22 @@ export function number_jog_koro(number_1: number, number_2: number) {
  * @returns {Response} - JSON স্ট্রিং সম্বলিত HTTP প্রতিক্রিয়া।
  */
 export function dokaner_bill_firiyao() {
-  var name = "jalebi bi"; // একটি নির্দিষ্ট নাম সেট করা
-  var total_amount = number_jog_koro(3, 7); // ৩ এবং ৭ যোগ করে মান নির্ধারণ করা
-  var response_data = { name: name, total_amount: total_amount }; // অবজেক্ট তৈরি করা
-  var response_string = JSON.stringify(response_data); // অবজেক্টকে JSON স্ট্রিং এ রূপান্তর
-  var http_status_code = { status: 200 }; // HTTP প্রতিক্রিয়ার স্ট্যাটাস কোড
-  var http_response = new Response(response_string, http_status_code); // HTTP প্রতিক্রিয়া তৈরি
-  return http_response;
+  const name = "jalebi bi"; // একটি নির্দিষ্ট নাম সেট করা
+  const total_amount = number_jog_koro(3, 7); // ৩ এবং ৭ যোগ করে মান নির্ধারণ করা
+  const response_data = { name: name, total_amount: total_amount }; // অবজেক্ট তৈরি করা
+  const response_string = JSON.stringify(response_data); // অবজেক্টকে JSON স্ট্রিং এ রূপান্তর
+  const http_status_code = { status: 200 }; // HTTP প্রতিক্রিয়ার স্ট্যাটাস কোড
+  return new Response(response_string, http_status_code); // HTTP প্রতিক্রিয়া তৈরি
 }
 
 // ফাংশনটিকে একটি ভেরিয়েবলে সংরক্ষণ
-var add_function = number_jog_koro;
+const add_function = number_jog_koro;
 
 // ফাংশনটি ৩ এবং ৭ মান সহ কল করা এবং ফলাফল সংরক্ষণ
-var sum_result = number_jog_koro(3, 7);
+const sum_result = number_jog_koro(3, 7);
 
 // ফাংশনটি ভেরিয়েবল ব্যবহার করে কল করা
-var sum_result_using_variable = add_function(3, 7);
+const sum_result_using_variable = add_function(3, 7);
 
 // ফাংশনের রেফারেন্স কনসোলে দেখানো
 console.log(add_function); // আউটপুট: ফাংশন রেফারেন্স
