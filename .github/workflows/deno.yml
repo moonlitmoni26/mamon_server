@@ -25,9 +25,9 @@ jobs:
 
       - name: Setup Deno
         # ব্যবহার: denoland/setup-deno@v1
-        uses: denoland/setup-deno@61fe2df320078202e33d7d5ad347e7dcfa0e8f31  # v1.1.2
+        uses: denoland/setup-deno@6057bc30da1df2b247f584b5280e1f10c02eec75  # v2.2.1
         with:
-          deno-version: v1.x
+          deno-version: v2.x
 
       # প্রতিটি কমিটে 'deno fmt' ব্যবহারের সত্যতা যাচাই করতে এই ধাপটি আনকমেন্ট করুন।
       # - name: Verify formatting
